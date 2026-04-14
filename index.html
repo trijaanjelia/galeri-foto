@@ -5,8 +5,27 @@
     <title>Galeri Foto</title>
 </head>
 <link rel="stylesheet" href="style.css">
+<script>
+const upload = document.getElementById("upload");
+const gallery = document.getElementById("gallery");
+
+upload.addEventListener("change", function(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+        const img = document.createElement("img");
+        img.src = e.target.result;
+        gallery.appendChild(img);
+    }
+
+    reader.readAsDataURL(file);
+});
+</script>
 <body>
     <h1>Galeri Foto Saya</h1>
+    <input type="file" id="upload" accept="image/*">
+<div class="gallery" id="gallery"></div>
 </body>
 </html>
     <div class="gallery">
