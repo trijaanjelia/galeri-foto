@@ -3,35 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <title>Galeri Foto</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-<link rel="stylesheet" href="style.css">
+<body>
+
+<h1>Galeri Foto Saya</h1>
+
+<!-- Tambah kategori -->
+<div class="form">
+    <input type="text" id="kategoriBaru" placeholder="Tambah kategori baru">
+    <button onclick="tambahKategori()">Tambah</button>
+</div>
+
+<!-- Pilih kategori -->
+<select id="kategori">
+    <option value="semua">Semua</option>
+    <option value="alam">Alam</option>
+    <option value="kota">Kota</option>
+    <option value="makanan">Makanan</option>
+</select>
+
+<br><br>
+
+<!-- Upload -->
+<input type="file" id="upload" accept="image/*">
+
+<!-- Galeri -->
+<div id="gallery" class="gallery">
+
+    <!-- ALAM -->
+    <img src="https://picsum.photos/300?random=1" data-kategori="alam">
+    <img src="https://picsum.photos/300?random=2" data-kategori="alam">
+    <img src="https://picsum.photos/300?random=3" data-kategori="alam">
+    <img src="https://picsum.photos/300?random=4" data-kategori="alam">
+    <img src="https://picsum.photos/300?random=5" data-kategori="alam">
+
+    <!-- KOTA -->
+    <img src="https://picsum.photos/300?random=6" data-kategori="kota">
+    <img src="https://picsum.photos/300?random=7" data-kategori="kota">
+    <img src="https://picsum.photos/300?random=8" data-kategori="kota">
+    <img src="https://picsum.photos/300?random=9" data-kategori="kota">
+    <img src="https://picsum.photos/300?random=10" data-kategori="kota">
+
+    <!-- MAKANAN -->
+    <img src="https://picsum.photos/300?random=11" data-kategori="makanan">
+    <img src="https://picsum.photos/300?random=12" data-kategori="makanan">
+    <img src="https://picsum.photos/300?random=13" data-kategori="makanan">
+    <img src="https://picsum.photos/300?random=14" data-kategori="makanan">
+    <img src="https://picsum.photos/300?random=15" data-kategori="makanan">
+
+</div>
+
 <script>
 const upload = document.getElementById("upload");
 const gallery = document.getElementById("gallery");
+const kategori = document.getElementById("kategori");
+const kategoriBaru = document.getElementById("kategoriBaru");
 
+// Tambah kategori
+function tambahKategori() {
+    const value = kategoriBaru.value.trim();
+    if (value === "") return;
+
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = value;
+
+    kategori.appendChild(option);
+    kategoriBaru.value = "";
+}
+
+// Upload gambar
 upload.addEventListener("change", function(event) {
     const file = event.target.files[0];
+    if (!file) return;
+
     const reader = new FileReader();
 
     reader.onload = function(e) {
         const img = document.createElement("img");
         img.src = e.target.result;
+        img.setAttribute("data-kategori", kategori.value);
         gallery.appendChild(img);
-    }
+
+        filterGambar();
+    };
 
     reader.readAsDataURL(file);
 });
+
+// Filter kategori
+function filterGambar() {
+    const images = document.querySelectorAll("#gallery img");
+    const selected = kategori.value;
+
+    images.forEach(img => {
+        const kategoriImg = img.getAttribute("data-kategori");
+
+        if (selected === "semua" || kategoriImg === selected) {
+            img.style.display = "block";
+        } else {
+            img.style.display = "none";
+        }
+    });
+}
+
+// Event kategori
+kategori.addEventListener("change", filterGambar);
+
+// Jalankan awal
+filterGambar();
 </script>
-<body>
-    <h1>Galeri Foto Saya</h1>
-    <input type="file" id="upload" accept="image/*">
-<div class="gallery" id="gallery"></div>
+
 </body>
 </html>
-    <div class="gallery">
-        <img src="https://picsum.photos/300?1">
-        <img src="https://picsum.photos/300?2">
-        <img src="https://picsum.photos/300?3">
-        <img src="https://picsum.photos/300?4">
-    </div>
-</body>
